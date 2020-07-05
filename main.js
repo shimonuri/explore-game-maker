@@ -1,6 +1,5 @@
 "use strict";
 
-initCanvas(600, 358);
 var x = 150;
 var y = 200;
 const MOVING_SHAPE_WIDTH = 100;
@@ -45,7 +44,7 @@ function mainLoop() {
     vy += -10;
   }
 
-  hlClear();
+  clear();
   x += vx;
   y += vy;
   const color = isCollides(x, y) ? "lime" : "orange";

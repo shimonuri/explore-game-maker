@@ -32,11 +32,8 @@ var initCanvas; // need to call, etc.  returns canv if direct drawing desired
 var hlStartMainLoop;
 var hlStopMainLoop;
 var hlGetPeriod;
-var hlClear;
-var hlDrawRect;
+var clear;
 var fillPixel;
-var hlDrawCircle;
-var hlDrawText;
 var hlMouseX; // returns last mouse x coordinate, in canvas coordinates
 var hlMouseY;
 var hlKeyHeld; // takes KeyboardEvent.key value as arg; link to mdn doco
@@ -78,21 +75,11 @@ var hlKeyHeld; // takes KeyboardEvent.key value as arg; link to mdn doco
 
   // Define all canvas-requiring functions to emit an error if they're called
   //  before initCanvas has been called
-  hlClear = function () {
-    warn("Calls to hlClear won't do anything until initCanvas has been called");
+  clear = function () {
+    warn("Calls to clear won't do anything until initCanvas has been called");
   };
   fillPixel = function () {
     "Calls to fillPixel won't do anything until initCanvas has been called";
-  };
-  hlDrawRect = function () {
-    warn(
-      "Calls to hlDrawRect won't do anything until initCanvas has been called"
-    );
-  };
-  hlDrawText = function () {
-    warn(
-      "Calls to hlDrawText won't do anything until initCanvas has been called"
-    );
   };
   hlMouseX = function () {
     warn(
@@ -107,20 +94,10 @@ var hlKeyHeld; // takes KeyboardEvent.key value as arg; link to mdn doco
 
   // Define initCanvas & canvas requiring functions
 
-  initCanvas = function (canvWidth, canvHeight) {
+  initCanvas = function () {
     /* Injects a canvas into the html body
      * Defines Draw functions
      */
-
-    // Check validity of arguments
-    if (typeof canvHeight !== "number") {
-      error('the "canvHeight" argument for "hlClear" has to be a number');
-      return;
-    }
-    if (typeof canvWidth !== "number") {
-      error('the "canvWidth" argument for "hlClear" has to be a number');
-      return;
-    }
 
     // Emit warning if initCanvas has already been called
     if (canvInitialized) {
@@ -130,30 +107,15 @@ var hlKeyHeld; // takes KeyboardEvent.key value as arg; link to mdn doco
     }
     canvInitialized = true;
 
-    // Create & Inject canvas element
-    // These few lines of code are sort of specific to how HTML5 works; for more
-    //  info, look up DOM manipulation (TODO put good MDN Link if there is one)
-    var canv = document.createElement("canvas"); // creates a canvas DOM element
-    canv.width = canvWidth; // note that this is a property of the canvas, NOT it's style
-    canv.height = canvHeight;
-    canv.style.display = "block"; // so the canvas can be centered
-    canv.style.margin = "auto"; // centers the canvas
-    canv.style.marginTop = "50px";
-    if (document.body) document.getElementById("main").appendChild(canv);
-    else
-      window.addEventListener("load", function () {
-        document.getElementById("main").appendChild(canv);
-      });
+    var canv = document.getElementById("game"); // creates a canvas DOM element
 
-    // Define drawing functions
-
-    hlClear = function (color = "black") {
+    clear = function (color = "black") {
       if (typeof color !== "string") {
-        error('the "color" argument for "hlClear" has to be a string');
+        error('the "color" argument for "clear" has to be a string');
         return;
       }
 
-      canv.getContext("2d").clearRect(0, 0, canvWidth, canvHeight);
+      canv.getContext("2d").clearRect(0, 0, canv.width, canv.height);
       canv.style.backgroundColor = color;
     };
 
@@ -170,6 +132,7 @@ var hlKeyHeld; // takes KeyboardEvent.key value as arg; link to mdn doco
         error('the "color" argument for "hlDrawRect" has to be a string');
         return;
       }
+
       const pixelSize = 1;
       var ctx = canv.getContext("2d");
       ctx.fillStyle = color;
@@ -181,105 +144,13 @@ var hlKeyHeld; // takes KeyboardEvent.key value as arg; link to mdn doco
       );
       ctx.fillStyle = "#f0f"; // To make color errors more obvious
     };
-    hlDrawRect = function (x, y, width, height, color) {
-      if (typeof x !== "number") {
-        error('the "x" argument for "hlDrawRect" has to be a number');
-        return;
-      }
-      if (typeof y !== "number") {
-        error('the "y" argument for "hlDrawRect" has to be a number');
-        return;
-      }
-      if (typeof width !== "number") {
-        error('the "width" argument for "hlDrawRect" has to be a number');
-        return;
-      }
-      if (typeof height !== "number") {
-        error('the "height" argument for "hlDrawRect" has to be a number');
-        return;
-      }
-      if (typeof color !== "string") {
-        error('the "color" argument for "hlDrawRect" has to be a string');
-        return;
-      }
-
-      // TODO add check if color invalid, print error if so and ax f0f below and in clear
-      var ctx = canv.getContext("2d");
-      ctx.fillStyle = color;
-      ctx.fillRect(x - width / 2, canvHeight - height / 2 - y, width, height);
-      ctx.fillStyle = "#f0f"; // To make color errors more obvious
-    };
-
-    hlDrawCircle = function (x, y, radius, color) {
-      if (typeof x !== "number") {
-        error('the "x" argument for "hlDrawCircle" has to be a number');
-        return;
-      }
-      if (typeof y !== "number") {
-        error('the "y" argument for "hlDrawCircle" has to be a number');
-        return;
-      }
-      if (typeof radius !== "number") {
-        error('the "radius" argument for "hlDrawCircle" has to be a number');
-        return;
-      }
-      if (typeof color !== "string") {
-        error('the "color" argument for "hlDrawCircle" has to be a string');
-        return;
-      }
-
-      // TODO add check if color invalid, print error if so and ax f0f below and in clear
-      var ctx = canv.getContext("2d");
-      ctx.fillStyle = color;
-      ctx.beginPath();
-      ctx.arc(x, canvHeight - y, radius, 0, 2 * Math.PI);
-      ctx.fill();
-      ctx.fillStyle = "#f0f"; // To make color errors more obvious
-    };
-
-    hlDrawText = function (
-      x,
-      y,
-      text,
-      color = "white",
-      size = 20,
-      align = "left"
-    ) {
-      if (typeof x !== "number") {
-        error('the "x" argument for "hlDrawText" has to be a number');
-        return;
-      }
-      if (typeof y !== "number") {
-        error('the "y" argument for "hlDrawText" has to be a number');
-        return;
-      }
-      if (typeof color !== "string") {
-        error('the "color" argument for "hlDrawText" has to be a string');
-        return;
-      }
-      if (typeof size !== "number") {
-        error('the "size" argument for "hlDrawText" has to be a number');
-        return;
-      }
-      if (typeof align !== "string") {
-        error('the "align" argument for "hlDrawText" has to be a string');
-        return;
-      }
-
-      var ctx = canv.getContext("2d");
-      ctx.fillStyle = color;
-      ctx.textAlign = align;
-      ctx.font = size + "px monospace";
-      ctx.fillText(text, x, canvHeight - y);
-      ctx.fillStyle = "#f0f"; // To make color errors more obvious
-    };
 
     // Update lastMouseX/Y coordinates on mousemove events
 
     canv.addEventListener("mousemove", function (e) {
       var cr = canv.getBoundingClientRect();
       lastMouseX = e.clientX - cr.x;
-      lastMouseY = canvHeight - (e.clientY - cr.y);
+      lastMouseY = canv.height - (e.clientY - cr.y);
     });
 
     // Getter functions
@@ -306,7 +177,7 @@ var hlKeyHeld; // takes KeyboardEvent.key value as arg; link to mdn doco
     };
 
     // Set background color to default
-    hlClear();
+    clear();
 
     return canv;
   };
@@ -438,3 +309,5 @@ var hlKeyHeld; // takes KeyboardEvent.key value as arg; link to mdn doco
     return key in keyCatcher;
   };
 })();
+
+initCanvas();
