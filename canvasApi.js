@@ -121,15 +121,15 @@ var hlKeyHeld; // takes KeyboardEvent.key value as arg; link to mdn doco
 
     fillPixel = function (x, y, color) {
       if (typeof x !== "number") {
-        error('the "x" argument for "hlDrawRect" has to be a number');
+        console.log('the "x" argument for "fillPixel" has to be a number');
         return;
       }
       if (typeof y !== "number") {
-        error('the "y" argument for "hlDrawRect" has to be a number');
+        console.log('the "y" argument for "fillPixel" has to be a number');
         return;
       }
       if (typeof color !== "string") {
-        error('the "color" argument for "hlDrawRect" has to be a string');
+        console.log('the "color" argument for "fillPixel" has to be a string');
         return;
       }
 

@@ -1,82 +1,57 @@
 "use strict";
 
-var x = 150;
-var y = 200;
-const MOVING_SHAPE_WIDTH = 100;
-const MOVING_SHAPE_HEIGHT = 50;
-const STATIC_SHAPE_WIDTH = 200;
-const STATIC_SHAPE_HEIGHT = 50;
-const STATIC_SHAPE_X = 200;
-const STATE_SHAPE_Y = 100;
-
-function isCollides(x, y) {
-  let xCollides = false;
-  if (
-    x < STATIC_SHAPE_X + STATIC_SHAPE_WIDTH &&
-    x > STATIC_SHAPE_X - STATIC_SHAPE_WIDTH
-  ) {
-    xCollides = true;
-  }
-  let yCollides = false;
-  if (
-    y < STATE_SHAPE_Y + STATIC_SHAPE_HEIGHT &&
-    y > STATE_SHAPE_Y - STATIC_SHAPE_HEIGHT
-  ) {
-    yCollides = true;
-  }
-
-  return xCollides && yCollides;
-}
-
+let rec1 = new Rectangle(400, 300, 20, 20, "yellow");
+let mainRec = new Rectangle(150, 200, 40, 40, "green");
+let currentScreenState = new ScreenState();
+let isFirst = true;
 function mainLoop() {
+  let newScreenState = new ScreenState();
   let vx = 0;
   let vy = 0;
   if (hlKeyHeld("ArrowRight")) {
-    vx += 10;
+    vx += 5;
   }
   if (hlKeyHeld("ArrowLeft")) {
-    vx += -10;
+    vx += -5;
   }
   if (hlKeyHeld("ArrowUp")) {
-    vy += 10;
+    vy += 5;
   }
   if (hlKeyHeld("ArrowDown")) {
-    vy += -10;
+    vy += -5;
   }
-
-  clear();
-  x += vx;
-  y += vy;
-  const color = isCollides(x, y) ? "lime" : "orange";
-  fillRectangle(x, y, STATIC_SHAPE_WIDTH, STATIC_SHAPE_HEIGHT, color);
-  add_falling_balls();
+  if (!vy && !vx) return;
+  // clear();
+  mainRec.setSpeed(vx, vy);
+  mainRec.draw(newScreenState, isFirst);
+  if (!mainRec.isCollides(rec1)) {
+    rec1.draw(newScreenState, isFirst);
+  } else {
+    rec1 = new Rectangle(
+      Math.round(Math.random() * 400),
+      Math.round(Math.random() * 400),
+      20,
+      20,
+      "yellow"
+    );
+    mainRec.color = ["green", "red", "pink", "orange"][
+      Math.round(Math.random() * 3)
+    ];
+    mainRec.height += 100;
+    mainRec.width += 100;
+    rec1.draw(newScreenState, true);
+  }
+  const diffState = currentScreenState.getDiff(newScreenState);
+  paintScreenState(diffState);
+  currentScreenState = newScreenState;
+  isFirst = false;
 }
 
 let ballX = 400;
 let ballY = 400;
 function add_falling_balls() {
-  fillCircle(ballX, ballY, 10, 1000, "green");
-
+  fillColoredCircle(ballX, ballY, 20, 40, "green");
   ballY -= 2;
-}
-
-function fillCircle(x, y, radius, dens_level, color) {
-  var i;
-  var deg;
-  console.log(dens_level);
-  for (i = 0; i < dens_level; i++) {
-    deg = i * ((Math.PI * 2) / dens_level);
-    fillPixel(x + radius * Math.cos(deg), y + radius * Math.sin(deg), color);
-  }
-}
-function fillRectangle(x, y, width, height, color) {
-  var i;
-  for (i = 0; i < width; i++) {
-    var j;
-    for (j = 0; j < height; j++) {
-      fillPixel(x + i, y + j, color);
-    }
-  }
 }
 
 hlStartMainLoop(mainLoop);
