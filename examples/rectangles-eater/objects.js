@@ -39,36 +39,3 @@ class Rectangle {
     fillRectangle(this.x, this.y, this.width, this.height, this.color);
   }
 }
-class Ball {
-  constructor(x, y) {
-    this.x = x;
-    this.y = y;
-  }
-}
-
-class ScreenState {
-  constructor() {
-    this.screen = {};
-  }
-  fillPixel(x, y, color) {
-    this.screen[[x, y]] = color;
-  }
-  getDiff(otherScreen) {
-    let diff = new ScreenState();
-    for (const [screenLocation, color] of Object.entries(otherScreen.screen)) {
-      if (screenLocation in this.screen) {
-        if (color !== this.screen[screenLocation]) {
-          diff.screen[screenLocation] = color;
-        }
-      } else {
-        diff.screen[screenLocation] = color;
-      }
-    }
-    // for (const screenLocation of Object.keys(this.screen)) {
-    //   if (!(screenLocation in otherScreen.screen)) {
-    //     diff.screen[screenLocation] = "black";
-    //   }
-    // }
-    return diff;
-  }
-}
