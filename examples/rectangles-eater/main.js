@@ -1,7 +1,7 @@
 "use strict";
 
-let rec1 = new Rectangle(400, 300, 20, 20, "yellow");
-let mainRec = new Rectangle(150, 200, 100, 200, "green");
+let recs = [new Rectangle(400, 300, 20, 20, "yellow")];
+let mainRec = new Rectangle(150, 200, 100, 100, "green");
 function mainLoop() {
   let vx = 0;
   let vy = 0;
@@ -17,28 +17,35 @@ function mainLoop() {
   if (isKeyHeld("ArrowDown")) {
     vy += -5;
   }
-  if (!vy && !vx) return;
   clear();
   mainRec.setSpeed(vx, vy);
   mainRec.draw();
 
-  if (!mainRec.isCollides(rec1)) {
-    rec1.draw();
-  } else {
-    console.log("collides");
-    rec1 = new Rectangle(
-      Math.round(Math.random() * 400),
-      Math.round(Math.random() * 400),
-      20,
-      20,
-      "yellow"
-    );
-    mainRec.color = ["green", "red", "pink", "orange"][
-      Math.round(Math.random() * 3)
-    ];
-    mainRec.increaseSize(5, 5);
-    rec1.draw();
+  var newRecs = [];
+  for (const rec of recs) {
+    if (!mainRec.isCollides(rec)) {
+      rec.draw();
+      newRecs.push(rec);
+    } else {
+      mainRec.color = ["green", "red", "pink", "orange"][
+        Math.round(Math.random() * 3)
+      ];
+      mainRec.increaseSize(5, 5);
+
+      for (const i in [1, 2]) {
+        const newRec = new Rectangle(
+          Math.round(Math.random() * 500),
+          Math.round(Math.random() * 500),
+          20,
+          20,
+          "yellow"
+        );
+        newRec.draw();
+        newRecs.push(newRec);
+      }
+    }
   }
+  recs = newRecs;
 }
 
 let ballX = 400;
