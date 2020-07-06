@@ -1,4 +1,4 @@
-function fillColoredCircle(x, y, radius, densLevel, color) {
+function fillColoredCircleFromPixels(x, y, radius, densLevel, color) {
   var i;
   var currentRadius;
   for (i = 0; i < densLevel; i++) {
@@ -7,7 +7,7 @@ function fillColoredCircle(x, y, radius, densLevel, color) {
   }
 }
 
-function fillCircle(x, y, radius, densLevel, color) {
+function fillCircleFromPixels(x, y, radius, densLevel, color) {
   var i;
   var deg;
   for (i = 0; i < densLevel; i++) {
