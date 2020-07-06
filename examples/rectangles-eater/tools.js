@@ -15,7 +15,7 @@ function fillCircle(x, y, radius, densLevel, color) {
     fillPixel(x + radius * Math.cos(deg), y + radius * Math.sin(deg), color);
   }
 }
-function fillRectangle(x, y, width, height, color, screenState) {
+function fillRectangleFromPixels(x, y, width, height, color, screenState) {
   var i;
   for (i = 0; i < width; i += 2) {
     var j;
@@ -26,12 +26,5 @@ function fillRectangle(x, y, width, height, color, screenState) {
         screenState.fillPixel(x + i, y + j, color);
       }
     }
-  }
-}
-
-function paintScreenState(screenState) {
-  for (const [screenLocation, color] of Object.entries(screenState.screen)) {
-    const [x, y] = screenLocation.split(",");
-    fillPixel(parseInt(x), parseInt(y), color);
   }
 }

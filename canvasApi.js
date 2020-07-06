@@ -18,7 +18,7 @@
  *
  * Document how keyCatcher and keyState work.  keyCatcher is NOT unset when a keyup event
  *  happens, so that if a player just TAPS a key really quick and the keyup happens before
- *  the next mainLoop, hlKeyHeld still returns true for that key.  Instead, keyState is
+ *  the next mainLoop, isKeyHeld still returns true for that key.  Instead, keyState is
  *  used to track both keyups and downs, and at the end of each mainLoop call the keyCatcher
  *  is purged and then updated with the values of keyState.
  *
@@ -29,14 +29,15 @@
 // Function "prototypes".  These are all defined in the anonymous function below
 // TODO comment each of these like in a .h file; put them in the order that they're likely to be called in
 var initCanvas; // need to call, etc.  returns canv if direct drawing desired
-var hlStartMainLoop;
-var hlStopMainLoop;
+var startMainLoop;
+var stopMainLoop;
 var hlGetPeriod;
 var clear;
 var fillPixel;
-var hlMouseX; // returns last mouse x coordinate, in canvas coordinates
-var hlMouseY;
-var hlKeyHeld; // takes KeyboardEvent.key value as arg; link to mdn doco
+var fillRectangle;
+var getMouseX; // returns last mouse x coordinate, in canvas coordinates
+var getMouseY;
+var isKeyHeld; // takes KeyboardEvent.key value as arg; link to mdn doco
 
 (function () {
   // Variables
@@ -79,16 +80,23 @@ var hlKeyHeld; // takes KeyboardEvent.key value as arg; link to mdn doco
     warn("Calls to clear won't do anything until initCanvas has been called");
   };
   fillPixel = function () {
-    "Calls to fillPixel won't do anything until initCanvas has been called";
-  };
-  hlMouseX = function () {
     warn(
-      "Calls to hlMouseX won't do anything until initCanvas has been called"
+      "Calls to fillPixel won't do anything until initCanvas has been called"
     );
   };
-  hlMouseY = function () {
+  fillRectangle = function () {
     warn(
-      "Calls to hlMouseY won't do anything until initCanvas has been called"
+      "Calls to fillRectangle won't do anything until initCanvas has been called"
+    );
+  };
+  getMouseX = function () {
+    warn(
+      "Calls to getMouseX won't do anything until initCanvas has been called"
+    );
+  };
+  getMouseY = function () {
+    warn(
+      "Calls to getMouseY won't do anything until initCanvas has been called"
     );
   };
 
@@ -145,6 +153,35 @@ var hlKeyHeld; // takes KeyboardEvent.key value as arg; link to mdn doco
       ctx.fillStyle = "#f0f"; // To make color errors more obvious
     };
 
+    fillRectangle = function (x, y, width, height, color) {
+      // y, x are in the center of the rectangle
+      if (typeof x !== "number") {
+        console.log('the "x" argument for "fillPixel" has to be a number');
+        return;
+      }
+      if (typeof y !== "number") {
+        console.log('the "y" argument for "fillPixel" has to be a number');
+        return;
+      }
+      if (typeof width !== "number") {
+        console.log('the "y" argument for "fillPixel" has to be a number');
+        return;
+      }
+      if (typeof height !== "number") {
+        console.log('the "y" argument for "fillPixel" has to be a number');
+        return;
+      }
+      if (typeof color !== "string") {
+        console.log('the "color" argument for "fillPixel" has to be a string');
+        return;
+      }
+
+      var ctx = canv.getContext("2d");
+      ctx.fillStyle = color;
+      ctx.fillRect(x - width / 2, canv.height - height / 2 - y, width, height);
+      ctx.fillStyle = "#f0f"; // To make color errors more obvious
+    };
+
     // Update lastMouseX/Y coordinates on mousemove events
 
     canv.addEventListener("mousemove", function (e) {
@@ -155,20 +192,20 @@ var hlKeyHeld; // takes KeyboardEvent.key value as arg; link to mdn doco
 
     // Getter functions
 
-    hlMouseX = function () {
+    getMouseX = function () {
       if (afReq == null) {
         warn(
-          "hlMouseX only works when a game loop has been started by hlStartMainLoop."
+          "getMouseX only works when a game loop has been started by startMainLoop."
         );
         return false;
       }
       return lastMouseX;
     };
 
-    hlMouseY = function () {
+    getMouseY = function () {
       if (afReq == null) {
         warn(
-          "hlMouseY only works when a game loop has been started by hlStartMainLoop."
+          "getMouseY only works when a game loop has been started by startMainLoop."
         );
         return false;
       }
@@ -184,7 +221,7 @@ var hlKeyHeld; // takes KeyboardEvent.key value as arg; link to mdn doco
 
   // Game loop functions
 
-  hlStartMainLoop = function (loopFunction, period = 0.016, data = null) {
+  startMainLoop = function (loopFunction, period = 0.016, data = null) {
     /*
      * TODO rewrite or scratch all comments in here
      * This function ensures that the main loop runs at a fixed rate
@@ -206,22 +243,22 @@ var hlKeyHeld; // takes KeyboardEvent.key value as arg; link to mdn doco
 
     if (typeof loopFunction !== "function") {
       error(
-        'the "loopFunction" argument for "hlStartMainLoop" has to be a function'
+        'the "loopFunction" argument for "startMainLoop" has to be a function'
       );
       return;
     }
     if (typeof period !== "number") {
-      error('the "period" argument for "hlStartMainLoop" has to be a number');
+      error('the "period" argument for "startMainLoop" has to be a number');
       return;
     }
     if (typeof data !== "object") {
-      error('the "data" argument for "hlStartMainLoop" has to be a object');
+      error('the "data" argument for "startMainLoop" has to be a object');
       return;
     }
 
     if (afReq != null) {
       warn(
-        "hlStartMainLoop has already been called; call hlStopMainLoop to stop the current loop."
+        "startMainLoop has already been called; call stopMainLoop to stop the current loop."
       );
       return;
     }
@@ -252,11 +289,9 @@ var hlKeyHeld; // takes KeyboardEvent.key value as arg; link to mdn doco
     onFrame();
   };
 
-  hlStopMainLoop = function () {
+  stopMainLoop = function () {
     if (afReq == null) {
-      warn(
-        "hlStopMainLoop has been called when no loop is currently executing."
-      );
+      warn("stopMainLoop has been called when no loop is currently executing.");
       return;
     }
 
@@ -293,15 +328,15 @@ var hlKeyHeld; // takes KeyboardEvent.key value as arg; link to mdn doco
     keyState = {};
   });
 
-  hlKeyHeld = function (key) {
+  isKeyHeld = function (key) {
     if (typeof key !== "string") {
-      error('the "key" argument for "hlKeyHeld" has to be a string');
+      error('the "key" argument for "isKeyHeld" has to be a string');
       return;
     }
 
     if (afReq == null) {
       warn(
-        "hlKeyHeld only works when a game loop has been started by hlStartMainLoop."
+        "isKeyHeld only works when a game loop has been started by startMainLoop."
       );
       return false;
     }
