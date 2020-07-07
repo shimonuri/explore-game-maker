@@ -5,6 +5,8 @@ class GameEngine {
     this.canv = document.getElementById("game"); // creates a canvas DOM element
     this.canvasWidth = this.canv.width;
     this.canvasHeight = this.canv.height;
+    this.keyCatcher = {};
+    this.keyState = {};
     this.canv.addEventListener("mousemove", function (e) {
       var cr = canv.getBoundingClientRect();
       this.lastMouseX = e.clientX - cr.x;
@@ -14,17 +16,17 @@ class GameEngine {
     window.addEventListener("keydown", function (e) {
       // TODO figure out how to bind shifted keys together;
       //  atm key down -> shift down -> key up -> shift up results in "stuck" key
-      keyCatcher[e.key] = true;
-      keyState[e.key] = true;
+      this.keyCatcher[e.key] = true;
+      this.keyState[e.key] = true;
     });
 
     window.addEventListener("keyup", function (e) {
-      keyState[e.key] = false;
+      this.keyState[e.key] = false;
     });
 
     window.addEventListener("blur", function () {
-      keyCatcher = {};
-      keyState = {};
+      this.keyCatcher = {};
+      this.keyState = {};
     });
   }
   fillPixels(locations, r, g, b, a) {
@@ -231,6 +233,6 @@ class GameEngine {
       return false;
     }
 
-    return key in keyCatcher;
+    return key in this.keyCatcher;
   }
 }
