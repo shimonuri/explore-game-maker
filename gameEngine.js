@@ -7,26 +7,29 @@ class GameEngine {
     this.canvasHeight = this.canv.height;
     this.keyCatcher = {};
     this.keyState = {};
+    this.afPeriod = null;
+    this.afReq = null;
+    const self = this;
     this.canv.addEventListener("mousemove", function (e) {
-      var cr = canv.getBoundingClientRect();
-      this.lastMouseX = e.clientX - cr.x;
-      this.lastMouseY = canvasHeight - (e.clientY - cr.y);
+      var cr = self.canv.getBoundingClientRect();
+      self.lastMouseX = e.clientX - cr.x;
+      self.lastMouseY = self.canvasHeight - (e.clientY - cr.y);
     });
 
     window.addEventListener("keydown", function (e) {
       // TODO figure out how to bind shifted keys together;
       //  atm key down -> shift down -> key up -> shift up results in "stuck" key
-      this.keyCatcher[e.key] = true;
-      this.keyState[e.key] = true;
+      self.keyCatcher[e.key] = true;
+      self.keyState[e.key] = true;
     });
 
     window.addEventListener("keyup", function (e) {
-      this.keyState[e.key] = false;
+      self.keyState[e.key] = false;
     });
 
     window.addEventListener("blur", function () {
-      this.keyCatcher = {};
-      this.keyState = {};
+      self.keyCatcher = {};
+      self.keyState = {};
     });
   }
   fillPixels(locations, r, g, b, a) {
@@ -82,7 +85,7 @@ class GameEngine {
       return;
     }
 
-    var ctx = canv.getContext("2d");
+    var ctx = this.canv.getContext("2d");
     ctx.fillStyle = color;
     ctx.fillRect(
       x - width / 2,
@@ -139,57 +142,62 @@ class GameEngine {
       return;
     }
 
-    if (afReq != null) {
+    if (this.afReq != null) {
       warn(
         "startMainLoop has already been called; call stopMainLoop to stop the current loop."
       );
       return;
     }
 
-    afPeriod = period;
+    this.afPeriod = period;
     const maxLag = 1.9 * period; // maximum amount of lag that will be compensated for, in seconds
-    var prevTime; // time when the last update is considered to have happened
 
+    let prevTime = this.prevTime;
+    const self = this;
     function onFrame(currTime) {
-      afReq = window.requestAnimationFrame(onFrame);
-
-      // Adjust prevTime so lag never exceeds maxLag
+      self.afReq = window.requestAnimationFrame(onFrame);
+      if (!currTime) {
+        return;
+      }
       if (currTime - prevTime >= 1000 * maxLag)
+        // Adjust prevTime so lag never exceeds maxLag
         prevTime = currTime - 1000 * maxLag;
 
       // Execute mainLoop until LAG IS LESS THAN PERIOD TODO
       while (currTime - prevTime >= 1000 * period) {
         // TODO double check that keyboard event handling is never multithreaded
-        //  and that it's impossible for keystroke to get lost between key check
-        //  in the loopFunction and the keyCatcher purge below
         loopFunction(data);
         prevTime += 1000 * period;
-        keyCatcher = {};
-        for (var k in keyState) if (keyState[k]) keyCatcher[k] = true;
+
+        // update keyCatcher only after loopFunction finished
+        self.keyCatcher = {};
+        for (var k in self.keyState)
+          if (self.keyState[k]) self.keyCatcher[k] = true;
       }
     }
     prevTime = performance.now() - period;
     onFrame();
   }
+
   stopMainLoop() {
-    if (afReq == null) {
+    if (this.afReq == null) {
       warn("stopMainLoop has been called when no loop is currently executing.");
       return;
     }
 
-    cancelAnimationFrame(afReq);
-    afReq = null;
+    cancelAnimationFrame(this.afReq);
+    this.afReq = null;
   }
 
   getPeriod() {
-    if (afReq == null) {
+    if (this.afReq == null) {
       warn(
         "getPeriod has been called when no loop is currently executing; returning 0."
       );
       return 0;
     }
 
-    return afPeriod;
+    return this.afPeriod;
   }
   getScreenHeight() {
     return this.canvasHeight;
@@ -226,7 +234,7 @@ class GameEngine {
       return;
     }
 
-    if (afReq == null) {
+    if (this.afReq == null) {
       warn(
         "isKeyHeld only works when a game loop has been started by startMainLoop."
       );

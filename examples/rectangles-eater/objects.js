@@ -1,5 +1,5 @@
 class Rectangle {
-  constructor(x, y, height, width, color) {
+  constructor(x, y, height, width, color, gameEngine) {
     this.x = x;
     this.y = y;
     this.vx = 0;
@@ -7,7 +7,7 @@ class Rectangle {
     this.height = height;
     this.width = width;
     this.color = color;
-    this.points = {};
+    this.gameEngine = gameEngine;
   }
   setSpeed(vx, vy) {
     this.vx = vx;
@@ -46,6 +46,12 @@ class Rectangle {
     //   100,
     //   255
     // );
-    fillRectangle(this.x, this.y, this.width, this.height, this.color);
+    this.gameEngine.fillRectangle(
+      this.x,
+      this.y,
+      this.width,
+      this.height,
+      this.color
+    );
   }
 }

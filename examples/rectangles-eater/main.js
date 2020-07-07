@@ -1,8 +1,8 @@
 "use strict";
 
 const gameEngine = new GameEngine();
-let recs = [new Rectangle(400, 300, 10, 10, "yellow")];
-let mainRec = new Rectangle(150, 200, 10, 10, "green");
+let recs = [new Rectangle(400, 300, 10, 10, "yellow", gameEngine)];
+let mainRec = new Rectangle(150, 200, 10, 10, "green", gameEngine);
 function mainLoop() {
   let vx = 0;
   let vy = 0;
@@ -38,7 +38,8 @@ function mainLoop() {
           Math.round(Math.random() * 500),
           20,
           20,
-          "yellow"
+          "yellow",
+          gameEngine
         );
         newRec.draw();
         newRecs.push(newRec);
@@ -58,4 +59,4 @@ function add_falling_balls() {
 fillRectangleFromPixels(200, 200, 55, 55, 255, 0, 0, 200, gameEngine);
 
 console.log("finished");
-// gameEngine.startMainLoop(mainLoop);
+gameEngine.startMainLoop(mainLoop);
