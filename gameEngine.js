@@ -1,5 +1,90 @@
 "use strict";
 
+class gameEngine {
+  constructor() {
+    this.canv = document.getElementById("game"); // creates a canvas DOM element
+    this.canvasWidth = canv.width;
+    this.canvasHeight = canv.height;
+  }
+    clear(color = "black") {
+      if (typeof color !== "string") {
+        error('the "color" argument for "clear" has to be a string');
+        return;
+      }
+
+      this.canv.getContext("2d").clearRect(0, 0, canvasWidth, canvasHeight);
+      this.canv.style.backgroundColor = color;
+    }
+    startMainLoop(loopFunction, period = 0.016, data = null) {
+      /*
+       * TODO rewrite or scratch all comments in here
+       * This function ensures that the main loop runs at a fixed rate
+       *
+       * Rate is determined by the period argument (defaults to ~60 fps)
+       * Note the the "prevTime" variable stores the time when the last
+       *  update should have happened ideally; it does NOT store the time
+       *  for when loopFunction executed last.
+       * The "maxLag" constant determines how much "slack" to allow between
+       *  prevTime and the current time.  Since this is written to allow for
+       *  both physics and rendering updates to happen in the main loop, this
+       *  is CURRENTLY (1.9) limited to under two frames worth of time, so it
+       *  doesn't waste time rendering multiple frames consecutively.
+       *  TODO maybe put this below next to maxLag
+       *  TODO maybe if lag is 2+ frames big, set some variable which is
+       *  checked in draw calls, so can catch up with physics without
+       *  drawing unnecessarily?
+       */
+  
+      if (typeof loopFunction !== "function") {
+        error(
+          'the "loopFunction" argument for "startMainLoop" has to be a function'
+        );
+        return;
+      }
+      if (typeof period !== "number") {
+        error('the "period" argument for "startMainLoop" has to be a number');
+        return;
+      }
+      if (typeof data !== "object") {
+        error('the "data" argument for "startMainLoop" has to be a object');
+        return;
+      }
+  
+      if (afReq != null) {
+        warn(
+          "startMainLoop has already been called; call stopMainLoop to stop the current loop."
+        );
+        return;
+      }
+  
+      afPeriod = period;
+      const maxLag = 1.9 * period; // maximum amount of lag that will be compensated for, in seconds
+      var prevTime; // time when the last update is considered to have happened
+  
+      function onFrame(currTime) {
+        afReq = window.requestAnimationFrame(onFrame);
+  
+        // Adjust prevTime so lag never exceeds maxLag
+        if (currTime - prevTime >= 1000 * maxLag)
+          prevTime = currTime - 1000 * maxLag;
+  
+        // Execute mainLoop until LAG IS LESS THAN PERIOD TODO
+        while (currTime - prevTime >= 1000 * period) {
+          // TODO double check that keyboard event handling is never multithreaded
+          //  and that it's impossible for keystroke to get lost between key check
+          //  in the loopFunction and the keyCatcher purge below
+          loopFunction(data);
+          prevTime += 1000 * period;
+          keyCatcher = {};
+          for (var k in keyState) if (keyState[k]) keyCatcher[k] = true;
+        }
+      }
+      prevTime = performance.now() - period;
+      onFrame();
+    };
+}
+
+
 /*
  * Input uses KeyboardEvent.key values, meaning that key position will depend on players
  *  keyboard layout, and that holding SHIFT will result in different values.  I went this
@@ -17,7 +102,6 @@
  */
 
 // Function "prototypes".  These are all defined in the anonymous function below
-var initCanvas; // need to call, etc.  returns canv if direct drawing desired
 var startMainLoop;
 var stopMainLoop;
 var getPeriod;
@@ -94,29 +178,7 @@ var getScreenHeight;
   // Define initCanvas & canvas requiring functions
 
   initCanvas = function () {
-    /* Injects a canvas into the html body
-     * Defines Draw functions
-     */
-
-    // Emit warning if initCanvas has already been called
-    if (canvInitialized) {
-      warn(
-        "initCanvas has been called more than once.  This will result in unusable canvases littering the page."
-      );
-    }
-    canvInitialized = true;
-
-    var canv = document.getElementById("game"); // creates a canvas DOM element
-    var canvasWidth = canv.width;
-    var canvasHeight = canv.height;
-    clear = function (color = "black") {
-      if (typeof color !== "string") {
-        error('the "color" argument for "clear" has to be a string');
-        return;
-      }
-
-      canv.getContext("2d").clearRect(0, 0, canvasWidth, canvasHeight);
-      canv.style.backgroundColor = color;
+    
     };
 
     fillPixels = function (locations, r, g, b, a) {
@@ -137,7 +199,8 @@ var getScreenHeight;
       }
       ctx.putImageData(imageData, 0, 0, 0, 0, canvasWidth, canvasHeight);
     };
-
+    /*
+     */
     fillRectangle = function (x, y, width, height, color) {
       // y, x are in the center of the rectangle
       if (typeof x !== "number") {
@@ -215,74 +278,6 @@ var getScreenHeight;
   };
 
   // Game loop functions
-
-  startMainLoop = function (loopFunction, period = 0.016, data = null) {
-    /*
-     * TODO rewrite or scratch all comments in here
-     * This function ensures that the main loop runs at a fixed rate
-     *
-     * Rate is determined by the period argument (defaults to ~60 fps)
-     * Note the the "prevTime" variable stores the time when the last
-     *  update should have happened ideally; it does NOT store the time
-     *  for when loopFunction executed last.
-     * The "maxLag" constant determines how much "slack" to allow between
-     *  prevTime and the current time.  Since this is written to allow for
-     *  both physics and rendering updates to happen in the main loop, this
-     *  is CURRENTLY (1.9) limited to under two frames worth of time, so it
-     *  doesn't waste time rendering multiple frames consecutively.
-     *  TODO maybe put this below next to maxLag
-     *  TODO maybe if lag is 2+ frames big, set some variable which is
-     *  checked in draw calls, so can catch up with physics without
-     *  drawing unnecessarily?
-     */
-
-    if (typeof loopFunction !== "function") {
-      error(
-        'the "loopFunction" argument for "startMainLoop" has to be a function'
-      );
-      return;
-    }
-    if (typeof period !== "number") {
-      error('the "period" argument for "startMainLoop" has to be a number');
-      return;
-    }
-    if (typeof data !== "object") {
-      error('the "data" argument for "startMainLoop" has to be a object');
-      return;
-    }
-
-    if (afReq != null) {
-      warn(
-        "startMainLoop has already been called; call stopMainLoop to stop the current loop."
-      );
-      return;
-    }
-
-    afPeriod = period;
-    const maxLag = 1.9 * period; // maximum amount of lag that will be compensated for, in seconds
-    var prevTime; // time when the last update is considered to have happened
-
-    function onFrame(currTime) {
-      afReq = window.requestAnimationFrame(onFrame);
-
-      // Adjust prevTime so lag never exceeds maxLag
-      if (currTime - prevTime >= 1000 * maxLag)
-        prevTime = currTime - 1000 * maxLag;
-
-      // Execute mainLoop until LAG IS LESS THAN PERIOD TODO
-      while (currTime - prevTime >= 1000 * period) {
-        // TODO double check that keyboard event handling is never multithreaded
-        //  and that it's impossible for keystroke to get lost between key check
-        //  in the loopFunction and the keyCatcher purge below
-        loopFunction(data);
-        prevTime += 1000 * period;
-        keyCatcher = {};
-        for (var k in keyState) if (keyState[k]) keyCatcher[k] = true;
-      }
-    }
-    prevTime = performance.now() - period;
-    onFrame();
-  };
 
   stopMainLoop = function () {
     if (afReq == null) {
