@@ -58,5 +58,4 @@ function add_falling_balls() {
 // fillRectangle(0, 0, 2000, 1000, "red");
 fillRectangleFromPixels(200, 200, 55, 55, 255, 0, 0, 200, gameEngine);
 
-console.log("finished");
 gameEngine.startMainLoop(mainLoop);

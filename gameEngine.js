@@ -150,33 +150,18 @@ class GameEngine {
     }
 
     this.afPeriod = period;
-    const maxLag = 1.9 * period; // maximum amount of lag that will be compensated for, in seconds
-
-    let prevTime = this.prevTime;
     const self = this;
     function onFrame(currTime) {
       self.afReq = window.requestAnimationFrame(onFrame);
-      if (!currTime) {
-        return;
-      }
-      if (currTime - prevTime >= 1000 * maxLag)
-        // Adjust prevTime so lag never exceeds maxLag
-        prevTime = currTime - 1000 * maxLag;
+      loopFunction(data);
 
-      // Execute mainLoop until LAG IS LESS THAN PERIOD TODO
-      while (currTime - prevTime >= 1000 * period) {
-        // TODO double check that keyboard event handling is never multithreaded
-        loopFunction(data);
-        prevTime += 1000 * period;
-
-        // update keyCatcher only after loopFunction finished
-        self.keyCatcher = {};
-        for (var k in self.keyState)
-          if (self.keyState[k]) self.keyCatcher[k] = true;
-      }
+      // update keyCatcher only after loopFunction finished
+      self.keyCatcher = {};
+      for (var k in self.keyState)
+        if (self.keyState[k]) self.keyCatcher[k] = true;
     }
-    prevTime = performance.now() - period;
-    onFrame();
+    // Execute mainLoop until LAG IS LESS THAN PERIOD TODO
+    this.afReq = window.requestAnimationFrame(onFrame);
   }
 
   stopMainLoop() {
@@ -208,7 +193,7 @@ class GameEngine {
   }
 
   getMouseX() {
-    if (afReq == null) {
+    if (this.afReq == null) {
       warn(
         "getMouseX only works when a game loop has been started by startMainLoop."
       );
@@ -218,7 +203,7 @@ class GameEngine {
   }
 
   getMouseY() {
-    if (afReq == null) {
+    if (this.afReq == null) {
       warn(
         "getMouseY only works when a game loop has been started by startMainLoop."
       );
