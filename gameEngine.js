@@ -31,7 +31,7 @@
 var initCanvas; // need to call, etc.  returns canv if direct drawing desired
 var startMainLoop;
 var stopMainLoop;
-var hlGetPeriod;
+var getPeriod;
 var clear;
 var fillPixels;
 var fillRectangle;
@@ -305,10 +305,10 @@ var getScreenHeight;
     afReq = null;
   };
 
-  hlGetPeriod = function () {
+  getPeriod = function () {
     if (afReq == null) {
       warn(
-        "hlGetPeriod has been called when no loop is currently executing; returning 0."
+        "getPeriod has been called when no loop is currently executing; returning 0."
       );
       return 0;
     }
