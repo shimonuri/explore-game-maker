@@ -13,7 +13,7 @@ It is meant to be used as a infrastructure for building games for educational/fu
 
 ### API
 
-#### Fill
+**Fill**
 
 - fillPixels(locations, red, green, blue, alpha)
 - fillRectangle(x, y, width, height, color)
@@ -21,13 +21,13 @@ It is meant to be used as a infrastructure for building games for educational/fu
 - getScreenWidth()
 - getScreenHeight()
 
-#### Loop
+**Loop**
 
 - startMainLoop(loopFunction);
 - stopMainLoop();
 - getPeriod();
 
-#### User Input
+**User Input**
 
 - getMouseX()
 - getMouseY()
