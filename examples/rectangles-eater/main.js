@@ -1,23 +1,24 @@
 "use strict";
 
+const gameEngine = new GameEngine();
 let recs = [new Rectangle(400, 300, 10, 10, "yellow")];
 let mainRec = new Rectangle(150, 200, 10, 10, "green");
 function mainLoop() {
   let vx = 0;
   let vy = 0;
-  if (isKeyHeld("ArrowRight")) {
+  if (gameEngine.isKeyHeld("ArrowRight")) {
     vx += 5;
   }
-  if (isKeyHeld("ArrowLeft")) {
+  if (gameEngine.isKeyHeld("ArrowLeft")) {
     vx += -5;
   }
-  if (isKeyHeld("ArrowUp")) {
+  if (gameEngine.isKeyHeld("ArrowUp")) {
     vy += 5;
   }
-  if (isKeyHeld("ArrowDown")) {
+  if (gameEngine.isKeyHeld("ArrowDown")) {
     vy += -5;
   }
-  clear();
+  gameEngine.clear();
   mainRec.setSpeed(vx, vy);
   mainRec.draw();
   var newRecs = [];
@@ -54,7 +55,7 @@ function add_falling_balls() {
   ballY -= 2;
 }
 // fillRectangle(0, 0, 2000, 1000, "red");
-fillRectangleFromPixels(200, 200, 55, 55, "red");
+fillRectangleFromPixels(200, 200, 55, 55, 255, 0, 0, 200, gameEngine);
 
 console.log("finished");
-startMainLoop(mainLoop);
+// gameEngine.startMainLoop(mainLoop);
