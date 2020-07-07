@@ -36,6 +36,7 @@ class Rectangle {
   draw() {
     this.x += this.vx;
     this.y += this.vy;
+    fillRectangleFromPixels(this.x, this.y, this.width, this.height, "reg");
     fillRectangle(this.x, this.y, this.width, this.height, this.color);
   }
 }

@@ -1,7 +1,7 @@
 "use strict";
 
-let recs = [new Rectangle(400, 300, 20, 20, "yellow")];
-let mainRec = new Rectangle(150, 200, 100, 100, "green");
+let recs = [new Rectangle(400, 300, 5, 5, "yellow")];
+let mainRec = new Rectangle(150, 200, 5, 5, "green");
 function mainLoop() {
   let vx = 0;
   let vy = 0;
@@ -20,7 +20,6 @@ function mainLoop() {
   clear();
   mainRec.setSpeed(vx, vy);
   mainRec.draw();
-
   var newRecs = [];
   for (const rec of recs) {
     if (!mainRec.isCollides(rec)) {
@@ -54,5 +53,6 @@ function add_falling_balls() {
   fillColoredCircle(ballX, ballY, 20, 40, "green");
   ballY -= 2;
 }
-
-startMainLoop(mainLoop);
+fillRectangleFromPixels(200, 200, 55, 55, "red");
+console.log("finished");
+// startMainLoop(mainLoop);

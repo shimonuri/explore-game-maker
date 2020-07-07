@@ -15,16 +15,14 @@ function fillCircleFromPixels(x, y, radius, densLevel, color) {
     fillPixel(x + radius * Math.cos(deg), y + radius * Math.sin(deg), color);
   }
 }
-function fillRectangleFromPixels(x, y, width, height, color, screenState) {
+function fillRectangleFromPixels(x, y, width, height, color) {
+  locations = [];
   var i;
-  for (i = 0; i < width; i += 2) {
+  for (i = 0; i < width; i += 1) {
     var j;
     for (j = 0; j < height; j++) {
-      if (!screenState) {
-        fillPixel(x + i, y + j, color);
-      } else {
-        screenState.fillPixel(x + i, y + j, color);
-      }
+      locations.push([x + i, y + j]);
     }
   }
+  fillPixel(locations, color);
 }

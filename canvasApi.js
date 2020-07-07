@@ -38,6 +38,8 @@ var fillRectangle;
 var getMouseX; // returns last mouse x coordinate, in canvas coordinates
 var getMouseY;
 var isKeyHeld; // takes KeyboardEvent.key value as arg; link to mdn doco
+var getScreenWidth;
+var getScreenHeight;
 
 (function () {
   // Variables
@@ -116,41 +118,47 @@ var isKeyHeld; // takes KeyboardEvent.key value as arg; link to mdn doco
     canvInitialized = true;
 
     var canv = document.getElementById("game"); // creates a canvas DOM element
-
+    var canvasWidth = canv.width;
+    var canvasHeight = canv.height;
     clear = function (color = "black") {
       if (typeof color !== "string") {
         error('the "color" argument for "clear" has to be a string');
         return;
       }
 
-      canv.getContext("2d").clearRect(0, 0, canv.width, canv.height);
+      canv.getContext("2d").clearRect(0, 0, canvasWidth, canvasHeight);
       canv.style.backgroundColor = color;
     };
 
-    fillPixel = function (x, y, color) {
-      if (typeof x !== "number") {
-        console.log('the "x" argument for "fillPixel" has to be a number');
-        return;
-      }
-      if (typeof y !== "number") {
-        console.log('the "y" argument for "fillPixel" has to be a number');
-        return;
-      }
+    fillPixel = function (locations, color) {
       if (typeof color !== "string") {
         console.log('the "color" argument for "fillPixel" has to be a string');
         return;
       }
 
-      const pixelSize = 1;
       var ctx = canv.getContext("2d");
-      ctx.fillStyle = color;
-      ctx.fillRect(
-        x - pixelSize / 2,
-        canv.height - pixelSize / 2 - y,
-        pixelSize,
-        pixelSize
-      );
-      ctx.fillStyle = "#f0f"; // To make color errors more obvious
+      var imageData = ctx.getImageData(0, 0, canvasWidth, canvasHeight);
+      var buf = new ArrayBuffer(imageData.data.length);
+      var buf8 = new Uint8ClampedArray(buf);
+      var data = new Uint32Array(buf);
+      for (const [x, y] of locations) {
+        data[y * canvasWidth + x] =
+          (1 << 24) | // alpha
+          (100 << 16) | // blue
+          (255 << 8) | // green
+          102; // red
+      }
+
+      imageData.data.set(buf8);
+      ctx.putImageData(imageData, 0, 0);
+      // ctx.fillStyle = color;
+      // ctx.fillRect(
+      //   x - pixelSize / 2,
+      //   canvasHeight - pixelSize / 2 - y,
+      //   pixelSize,
+      //   pixelSize
+      // );
+      // ctx.fillStyle = "#f0f"; // To make color errors more obvious
     };
 
     fillRectangle = function (x, y, width, height, color) {
@@ -178,7 +186,7 @@ var isKeyHeld; // takes KeyboardEvent.key value as arg; link to mdn doco
 
       var ctx = canv.getContext("2d");
       ctx.fillStyle = color;
-      ctx.fillRect(x - width / 2, canv.height - height / 2 - y, width, height);
+      ctx.fillRect(x - width / 2, canvasHeight - height / 2 - y, width, height);
       ctx.fillStyle = "#f0f"; // To make color errors more obvious
     };
 
@@ -187,10 +195,18 @@ var isKeyHeld; // takes KeyboardEvent.key value as arg; link to mdn doco
     canv.addEventListener("mousemove", function (e) {
       var cr = canv.getBoundingClientRect();
       lastMouseX = e.clientX - cr.x;
-      lastMouseY = canv.height - (e.clientY - cr.y);
+      lastMouseY = canvasHeight - (e.clientY - cr.y);
     });
 
     // Getter functions
+
+    getScreenHeight = function () {
+      return canvasHeight;
+    };
+
+    getScreenWidth = function () {
+      return canv.width;
+    };
 
     getMouseX = function () {
       if (afReq == null) {
