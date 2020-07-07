@@ -1,16 +1,6 @@
 "use strict";
 
 /*
- * Spellen Maken Helper Library  Version 0.00
- *
- *
- * TODO clean this up, and maybe move it to the doc page
- * Talk about how this is written:
- * Readability for folks who are new coders or unfamiliar with JavaScript the highest priority
- * NOT written for performance, or to be elegant or as an example of good coding practice
- * This is written so that what the code is doing is as transparent as possible, so it's
- *  easy to edit or replace with one's own code.
- *
  * Input uses KeyboardEvent.key values, meaning that key position will depend on players
  *  keyboard layout, and that holding SHIFT will result in different values.  I went this
  *  way because I believe it's the simplest to grasp (even though it's not robust). If
@@ -27,7 +17,6 @@
  */
 
 // Function "prototypes".  These are all defined in the anonymous function below
-// TODO comment each of these like in a .h file; put them in the order that they're likely to be called in
 var initCanvas; // need to call, etc.  returns canv if direct drawing desired
 var startMainLoop;
 var stopMainLoop;
