@@ -33,7 +33,7 @@ var startMainLoop;
 var stopMainLoop;
 var hlGetPeriod;
 var clear;
-var fillPixel;
+var fillPixels;
 var fillRectangle;
 var getMouseX; // returns last mouse x coordinate, in canvas coordinates
 var getMouseY;
@@ -53,7 +53,7 @@ var getScreenHeight;
 
   function warn(warningText) {
     /*
-		Prints warnings.  Uses an intrusive "alert" by default;
+		Prints warnings.  Ufises an intrusive "alert" by default;
 		if you find this annoying, feel free to delete the alert
 		and use the console line instead (just remember to keep
 		an eye on your console when debugging).
@@ -81,9 +81,9 @@ var getScreenHeight;
   clear = function () {
     warn("Calls to clear won't do anything until initCanvas has been called");
   };
-  fillPixel = function () {
+  fillPixels = function () {
     warn(
-      "Calls to fillPixel won't do anything until initCanvas has been called"
+      "Calls to fillPixels won't do anything until initCanvas has been called"
     );
   };
   fillRectangle = function () {
@@ -130,57 +130,47 @@ var getScreenHeight;
       canv.style.backgroundColor = color;
     };
 
-    fillPixel = function (locations, color) {
-      if (typeof color !== "string") {
-        console.log('the "color" argument for "fillPixel" has to be a string');
-        return;
+    fillPixels = function (locations, r, g, b, a) {
+      for (const c of [r, g, b, a]) {
+        if (typeof c !== "number") {
+          console.log("r, g, b, a arguments for fillPixels must be numbers");
+        }
       }
-
       var ctx = canv.getContext("2d");
       var imageData = ctx.getImageData(0, 0, canvasWidth, canvasHeight);
-      var buf = new ArrayBuffer(imageData.data.length);
-      var buf8 = new Uint8ClampedArray(buf);
-      var data = new Uint32Array(buf);
+      var data = imageData.data;
       for (const [x, y] of locations) {
-        data[y * canvasWidth + x] =
-          (1 << 24) | // alpha
-          (100 << 16) | // blue
-          (255 << 8) | // green
-          102; // red
+        const index = (y * canvasWidth + x) * 4;
+        data[index] = r;
+        data[index + 1] = g;
+        data[index + 2] = b;
+        data[index + 3] = a;
       }
-
-      imageData.data.set(buf8);
-      ctx.putImageData(imageData, 0, 0);
-      // ctx.fillStyle = color;
-      // ctx.fillRect(
-      //   x - pixelSize / 2,
-      //   canvasHeight - pixelSize / 2 - y,
-      //   pixelSize,
-      //   pixelSize
-      // );
-      // ctx.fillStyle = "#f0f"; // To make color errors more obvious
+      ctx.putImageData(imageData, 0, 0, 0, 0, canvasWidth, canvasHeight);
     };
 
     fillRectangle = function (x, y, width, height, color) {
       // y, x are in the center of the rectangle
       if (typeof x !== "number") {
-        console.log('the "x" argument for "fillPixel" has to be a number');
+        console.log('the "x" argument for "fillRectangle" has to be a number');
         return;
       }
       if (typeof y !== "number") {
-        console.log('the "y" argument for "fillPixel" has to be a number');
+        console.log('the "y" argument for "fillRectangle" has to be a number');
         return;
       }
       if (typeof width !== "number") {
-        console.log('the "y" argument for "fillPixel" has to be a number');
+        console.log('the "y" argument for "fillRectangle" has to be a number');
         return;
       }
       if (typeof height !== "number") {
-        console.log('the "y" argument for "fillPixel" has to be a number');
+        console.log('the "y" argument for "fillRectangle" has to be a number');
         return;
       }
       if (typeof color !== "string") {
-        console.log('the "color" argument for "fillPixel" has to be a string');
+        console.log(
+          'the "color" argument for "fillRectangle" has to be a string'
+        );
         return;
       }
 
@@ -205,7 +195,7 @@ var getScreenHeight;
     };
 
     getScreenWidth = function () {
-      return canv.width;
+      return canvasHeight;
     };
 
     getMouseX = function () {
