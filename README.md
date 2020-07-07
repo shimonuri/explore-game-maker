@@ -3,7 +3,7 @@
 ## Introduction
 
 "Game Maker" is a simple game engine.
-It is meant to be used as a educational platform for building games that runs on your browser.
+It is meant to be used as a infrastructure for building games for educational/fun purposes.
 
 ## Prerequisites for working with the game engine
 
