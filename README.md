@@ -23,7 +23,7 @@ It is meant to be used as a infrastructure for building games for educational/fu
 
 **Loop**
 
-- startMainLoop(loopFunction);
+- startMainLoop(loopFunction, data);
 - stopMainLoop();
 - getPeriod();
 

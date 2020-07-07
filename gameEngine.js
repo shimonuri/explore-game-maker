@@ -107,26 +107,7 @@ class GameEngine {
     this.canv.style.backgroundColor = color;
   }
 
-  startMainLoop(loopFunction, period = 0.016, data = null) {
-    /*
-     * TODO rewrite or scratch all comments in here
-     * This function ensures that the main loop runs at a fixed rate
-     *
-     * Rate is determined by the period argument (defaults to ~60 fps)
-     * Note the the "prevTime" variable stores the time when the last
-     *  update should have happened ideally; it does NOT store the time
-     *  for when loopFunction executed last.
-     * The "maxLag" constant determines how much "slack" to allow between
-     *  prevTime and the current time.  Since this is written to allow for
-     *  both physics and rendering updates to happen in the main loop, this
-     *  is CURRENTLY (1.9) limited to under two frames worth of time, so it
-     *  doesn't waste time rendering multiple frames consecutively.
-     *  TODO maybe put this below next to maxLag
-     *  TODO maybe if lag is 2+ frames big, set some variable which is
-     *  checked in draw calls, so can catch up with physics without
-     *  drawing unnecessarily?
-     */
-
+  startMainLoop(loopFunction, data = null) {
     if (typeof loopFunction !== "function") {
       error(
         'the "loopFunction" argument for "startMainLoop" has to be a function'
@@ -149,10 +130,10 @@ class GameEngine {
       return;
     }
 
-    this.afPeriod = period;
+    this.afPeriod = 0.016;
     const self = this;
-    function onFrame(currTime) {
-      self.afReq = window.requestAnimationFrame(onFrame);
+    function updateFrame(currTime) {
+      self.afReq = window.requestAnimationFrame(updateFrame);
       loopFunction(data);
 
       // update keyCatcher only after loopFunction finished
@@ -161,7 +142,7 @@ class GameEngine {
         if (self.keyState[k]) self.keyCatcher[k] = true;
     }
     // Execute mainLoop until LAG IS LESS THAN PERIOD TODO
-    this.afReq = window.requestAnimationFrame(onFrame);
+    this.afReq = window.requestAnimationFrame(updateFrame);
   }
 
   stopMainLoop() {
