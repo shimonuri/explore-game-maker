@@ -36,22 +36,23 @@ class Rectangle {
   draw() {
     this.x += this.vx;
     this.y += this.vy;
-    // fillRectangleFromPixels(
-    //   this.x,
-    //   this.y,
-    //   this.width,
-    //   this.height,
-    //   255,
-    //   0,
-    //   100,
-    //   255
-    // );
-    this.gameEngine.fillRectangle(
+    fillRectangleFromPixels(
       this.x,
       this.y,
       this.width,
       this.height,
-      this.color
+      255,
+      0,
+      100,
+      255,
+      gameEngine
     );
+    // this.gameEngine.fillRectangle(
+    //   this.x,
+    //   this.y,
+    //   this.width,
+    //   this.height,
+    //   this.color
+    // );
   }
 }
