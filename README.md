@@ -2,9 +2,10 @@
 
 ## Introduction
 
-"Game Maker" is a cool exercise, in which a game is designed and built based on a very limited game engine.
+"Game Maker" is a simple game engine.
+It is meant to be used as a educational platform for building games that runs on your browser.
 
-## Prerequisites
+## Prerequisites for working with the game engine
 
 - Background in HL programming
 - Basic understanding of high-school level math/physics.
