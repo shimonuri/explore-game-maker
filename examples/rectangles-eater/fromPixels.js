@@ -1,12 +1,15 @@
 function fillRectangleFromPixels(x, y, width, height, r, g, b, a, gameEngine) {
   locations = [];
   var i;
-  for (i = 0; i < width; i += 1) {
+  for (i = 0; i < width / 2; i += 1) {
     var j;
-    for (j = 0; j < height; j++) {
-      const xPos = x + i;
-      const yPos = gameEngine.getScreenHeight() - (y + j);
-      locations.push([xPos, yPos]);
+    for (j = 0; j < height / 2; j++) {
+      locations.push([x + i, gameEngine.getScreenHeight() - (y + j)]);
+      locations.push([x - i, gameEngine.getScreenHeight() - (y + j)]);
+    }
+    for (j = 0; j < height / 2; j++) {
+      locations.push([x + i, gameEngine.getScreenHeight() - (y - j)]);
+      locations.push([x - i, gameEngine.getScreenHeight() - (y - j)]);
     }
   }
   gameEngine.fillPixels(locations, r, g, b, a);
