@@ -11,7 +11,7 @@ It is meant to be used as a infrastructure for building games for educational/fu
 - Basic understanding of high-school level math/physics.
 - **Optional:** HTML/Javascript
 
-### API
+## API
 
 **Fill**
 
