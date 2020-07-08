@@ -233,6 +233,23 @@ class GameEngine {
   }
   getScreenPixels() {
     var ctx = this.canv.getContext("2d");
-    return ctx.getImageData(0, 0, this.canvasWidth, this.canvasHeight).data;
+    return new ScreenPixels(
+      ctx.getImageData(0, 0, this.canvasWidth, this.canvasHeight).data,
+      this.canvasWidth,
+      this.canvasHeight
+    );
+  }
+}
+
+class ScreenPixels {
+  constructor(data, width, height) {
+    this.data = data;
+    this.height = height;
+    this.width = width;
+  }
+  getPixel(x, y) {
+    y = this.height - y;
+    const index = (y * this.width + x) * 4;
+    return this.data.slice(index, index + 4);
   }
 }
