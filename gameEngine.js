@@ -208,17 +208,18 @@ class GameEngine {
 
     return key in this.keyCatcher;
   }
-  playSound(soundName) {
+  playSound(soundName, assetPath = "assets/sounds") {
     const soundElementId = `__${soundName}__`;
     let sound = document.getElementById(soundElementId);
     if (!sound) {
       sound = document.createElement("audio");
       sound.setAttribute("id", soundElementId);
       const source = document.createElement("source");
-      source.setAttribute("src", `assets/sounds/${soundName}.wav`);
+      source.setAttribute("src", `${assetPath}/${soundName}.wav`);
       sound.appendChild(source);
       document.getElementsByTagName("head")[0].appendChild(sound);
     }
+    sound.currentTime = 0;
     sound.play();
   }
   pauseSound(soundName) {
