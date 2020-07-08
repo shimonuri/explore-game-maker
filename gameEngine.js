@@ -41,7 +41,8 @@ class GameEngine {
     var ctx = this.canv.getContext("2d");
     var imageData = ctx.getImageData(0, 0, this.canvasWidth, this.canvasHeight);
     var data = imageData.data;
-    for (const [x, y] of positions) {
+    for (let [x, y] of positions) {
+      y = this.canvasHeight - y;
       const index = (y * this.canvasWidth + x) * 4;
       data[index] = r;
       data[index + 1] = g;
@@ -228,5 +229,9 @@ class GameEngine {
       return;
     }
     sound.pause();
+  }
+  getScreenPixels() {
+    var ctx = this.canv.getContext("2d");
+    return ctx.getImageData(0, 0, this.canvasWidth, this.canvasHeight).data;
   }
 }
