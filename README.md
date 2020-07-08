@@ -37,7 +37,7 @@ isSoundPlaying(soundName)
 **Loop**
 
 ```
-# the data will be passed to the loopFunction
+// the data will be passed to the loopFunction
 startMainLoop(loopFunction, data);
 stopMainLoop();
 getPeriod();
