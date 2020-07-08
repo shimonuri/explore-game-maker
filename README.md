@@ -21,6 +21,11 @@ It is meant to be used as a infrastructure for building games for educational/fu
 - getScreenWidth()
 - getScreenHeight()
 
+**Sound**
+
+- playSound(soundName)
+- pauseSound(soundName)
+
 **Loop**
 
 - startMainLoop(loopFunction, data);
