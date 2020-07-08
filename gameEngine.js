@@ -239,7 +239,7 @@ class GameEngine {
       console.log(`Sound ${soundName} was not found.`);
       return;
     }
-    return sound.currentTime > 0;
+    return !sound.paused;
   }
   getScreenPixels() {
     var ctx = this.canv.getContext("2d");
