@@ -23,8 +23,10 @@ It is meant to be used as a infrastructure for building games for educational/fu
 
 **Sound**
 
-- playSound(soundName)
-- pauseSound(soundName)
+```
+playSound(soundName)
+pauseSound(soundName)
+```
 
 **Loop**
 
