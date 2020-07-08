@@ -42,8 +42,8 @@ class GameEngine {
     var imageData = ctx.getImageData(0, 0, this.canvasWidth, this.canvasHeight);
     var data = imageData.data;
     for (let [x, y] of positions) {
-      y = this.canvasHeight - y;
-      const index = (y * this.canvasWidth + x) * 4;
+      y = this.canvasHeight - Math.round(y);
+      const index = (y * this.canvasWidth + Math.round(x)) * 4;
       data[index] = r;
       data[index + 1] = g;
       data[index + 2] = b;

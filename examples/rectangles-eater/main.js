@@ -3,11 +3,14 @@
 const gameEngine = new GameEngine();
 let recs = [new Rectangle(400, 300, 10, 10, gameEngine)];
 let mainRec = new Rectangle(150, 200, 10, 10, gameEngine);
+
 function mainLoop() {
   updatePlayerSpeed(mainRec);
   gameEngine.clear();
   mainRec.draw();
   var newRecs = [];
+
+  // handling collisions
   for (const rec of recs) {
     if (!mainRec.isCollides(rec)) {
       rec.draw();
@@ -55,8 +58,5 @@ function updatePlayerSpeed(player) {
   }
   player.setSpeed(vx, vy);
 }
-
-// fillRectangle(0, 0, 2000, 1000, "red");
-fillRectangleFromPixels(200, 200, 55, 55, 255, 0, 0, 200, gameEngine);
 
 gameEngine.startMainLoop(mainLoop);

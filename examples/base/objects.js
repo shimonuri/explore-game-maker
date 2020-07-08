@@ -14,14 +14,44 @@ class Rectangle {
     this.vy = vy;
   }
   isCollides(obj) {
+    if (obj instanceof Rectangle) {
+      return this.isCollidesWithRectangle(obj);
+    }
+    if (obj instanceof Ball) {
+      return this.isCollidesWithBall(obj);
+    }
+  }
+  getBorder() {
+    const positions = [];
+    const left = this.x - this.width / 2;
+    const right = this.x + this.width / 2;
+    const top = this.y + this.height / 2;
+    const bottom = this.y - this.height / 2;
+    for (const i = 0; i < this.height; i += 1) {
+      positions.push([left, bottom + i]);
+      positions.push([right, bottom + i]);
+    }
+    for (const i = 0; i < this.height; i += 1) {
+      positions.push([left + i, bottom]);
+      positions.push([left + i, top]);
+    }
+    return positions;
+  }
+  isCollidesWithBall(ball) {
+    for (const [x, y] of this.getBorder()) {
+      if (ball.isCollides(x, y)) return true;
+    }
+    return false;
+  }
+  isCollidesWithRectangle(otherRectangle) {
     const left1 = this.x - this.width / 2;
-    const left2 = obj.x - obj.width / 2;
+    const left2 = otherRectangle.x - otherRectangle.width / 2;
     const right1 = this.x + this.width / 2;
-    const right2 = obj.x + obj.width / 2;
+    const right2 = otherRectangle.x + otherRectangle.width / 2;
     const top1 = this.y - this.height / 2;
-    const top2 = obj.y - obj.height / 2;
+    const top2 = otherRectangle.y - otherRectangle.height / 2;
     const bottom1 = this.y + this.height / 2;
-    const bottom2 = obj.y + obj.height / 2;
+    const bottom2 = otherRectangle.y + otherRectangle.height / 2;
     return !(
       top1 > bottom2 ||
       top2 > bottom1 ||
@@ -47,12 +77,32 @@ class Rectangle {
       this.color[3],
       gameEngine
     );
-    // this.gameEngine.fillRectangle(
-    //   this.x,
-    //   this.y,
-    //   this.width,
-    //   this.height,
-    //   this.color
-    // );
+  }
+}
+
+class Ball {
+  constructor(x, y, radius, gameEngine, color = [255, 100, 0, 255]) {
+    this.x = x;
+    this.y = y;
+    this.radius = radius;
+    this.gameEngine = gameEngine;
+    this.color = color;
+  }
+  isCollides(x, y) {
+    const distance = Math.sqrt((this.x - x) ** 2 + (this.y - y) ** 2);
+    return distance <= this.radius;
+  }
+  draw() {
+    fillCircleFromPixels(
+      this.x,
+      this.y,
+      this.radius,
+      200,
+      this.color[0],
+      this.color[1],
+      this.color[2],
+      this.color[3],
+      gameEngine
+    );
   }
 }
