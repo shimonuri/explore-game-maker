@@ -93,11 +93,11 @@ class GameEngine {
       width,
       height
     );
-    ctx.fillStyle = "#f0f"; // To make color errors more obvious
+    ctx.fillStyle = "#f0f"; // To make color console.logs more obvious
   }
   clear(color = "black") {
     if (typeof color !== "string") {
-      error('the "color" argument for "clear" has to be a string');
+      console.log('the "color" argument for "clear" has to be a string');
       return;
     }
 
@@ -109,22 +109,18 @@ class GameEngine {
 
   startMainLoop(loopFunction, data = null) {
     if (typeof loopFunction !== "function") {
-      error(
+      console.log(
         'the "loopFunction" argument for "startMainLoop" has to be a function'
       );
       return;
     }
-    if (typeof period !== "number") {
-      error('the "period" argument for "startMainLoop" has to be a number');
-      return;
-    }
     if (typeof data !== "object") {
-      error('the "data" argument for "startMainLoop" has to be a object');
+      console.log('the "data" argument for "startMainLoop" has to be a object');
       return;
     }
 
     if (this.afReq != null) {
-      warn(
+      console.log(
         "startMainLoop has already been called; call stopMainLoop to stop the current loop."
       );
       return;
@@ -147,7 +143,9 @@ class GameEngine {
 
   stopMainLoop() {
     if (this.afReq == null) {
-      warn("stopMainLoop has been called when no loop is currently executing.");
+      console.log(
+        "stopMainLoop has been called when no loop is currently executing."
+      );
       return;
     }
 
@@ -157,7 +155,7 @@ class GameEngine {
 
   getPeriod() {
     if (this.afReq == null) {
-      warn(
+      console.log(
         "getPeriod has been called when no loop is currently executing; returning 0."
       );
       return 0;
@@ -175,7 +173,7 @@ class GameEngine {
 
   getMouseX() {
     if (this.afReq == null) {
-      warn(
+      console.log(
         "getMouseX only works when a game loop has been started by startMainLoop."
       );
       return false;
@@ -185,7 +183,7 @@ class GameEngine {
 
   getMouseY() {
     if (this.afReq == null) {
-      warn(
+      console.log(
         "getMouseY only works when a game loop has been started by startMainLoop."
       );
       return false;
@@ -196,17 +194,30 @@ class GameEngine {
 
   isKeyHeld(key) {
     if (typeof key !== "string") {
-      error('the "key" argument for "isKeyHeld" has to be a string');
+      console.log('the "key" argument for "isKeyHeld" has to be a string');
       return;
     }
 
     if (this.afReq == null) {
-      warn(
+      console.log(
         "isKeyHeld only works when a game loop has been started by startMainLoop."
       );
       return false;
     }
 
     return key in this.keyCatcher;
+  }
+  playSound(soundName) {
+    const soundElementId = `__${soundName}__`;
+    let sound = document.getElementById(soundElementId);
+    if (!sound) {
+      sound = document.createElement("audio");
+      sound.setAttribute("id", soundElementId);
+      const source = document.createElement("source");
+      source.setAttribute("src", `assets/sounds/${soundName}.wav`);
+      sound.appendChild(source);
+      document.getElementsByTagName("head")[0].appendChild(sound);
+    }
+    sound.play();
   }
 }

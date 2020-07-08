@@ -1,5 +1,6 @@
 "use strict";
+const gameEngine = new GameEngine();
 
 function mainLoop() {}
 
-startMainLoop(mainLoop);
+gameEngine.startMainLoop(mainLoop);
