@@ -32,7 +32,7 @@ function updatePlayerSpeed(player) {
   let ay = 0;
   let factor = 0.1;
   if (gameEngine.isKeyHeld(" ")) {
-    if (!gameEngine.isSoundPlayed("donk")) {
+    if (!gameEngine.isSoundPlaying("donk")) {
       gameEngine.playSound("donk", "../../assets/sounds");
     }
     if (player.vx > 0) {

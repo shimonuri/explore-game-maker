@@ -231,7 +231,7 @@ class GameEngine {
     }
     sound.pause();
   }
-  isSoundPlayed(soundName) {
+  isSoundPlaying(soundName) {
     const soundElementId = `__${soundName}__`;
     let sound = document.getElementById(soundElementId);
 

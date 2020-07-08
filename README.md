@@ -31,6 +31,7 @@ getScreenHeight()
 // soundName is the name of the wav file inside assets/sounds without the .wav
 playSound(soundName)
 pauseSound(soundName)
+isSoundPlaying(soundName)
 ```
 
 **Loop**
