@@ -32,7 +32,7 @@ class GameEngine {
       self.keyState = {};
     });
   }
-  fillPixels(locations, r, g, b, a) {
+  fillPixels(positions, r, g, b, a) {
     for (const c of [r, g, b, a]) {
       if (typeof c !== "number") {
         console.log("r, g, b, a arguments for fillPixels must be numbers");
@@ -41,7 +41,7 @@ class GameEngine {
     var ctx = this.canv.getContext("2d");
     var imageData = ctx.getImageData(0, 0, this.canvasWidth, this.canvasHeight);
     var data = imageData.data;
-    for (const [x, y] of locations) {
+    for (const [x, y] of positions) {
       const index = (y * this.canvasWidth + x) * 4;
       data[index] = r;
       data[index + 1] = g;
