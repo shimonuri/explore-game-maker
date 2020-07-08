@@ -24,7 +24,7 @@ It is meant to be used as a infrastructure for building games for educational/fu
 **Sound**
 
 ```
-// sound name is the name of the wav file inside assets/sounds without the .wav
+// soundName is the name of the wav file inside assets/sounds without the .wav
 playSound(soundName)
 pauseSound(soundName)
 ```
