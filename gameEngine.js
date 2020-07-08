@@ -220,13 +220,13 @@ class GameEngine {
     }
     sound.play();
   }
-  stopSound(soundName) {
+  pauseSound(soundName) {
     const soundElementId = `__${soundName}__`;
     let sound = document.getElementById(soundElementId);
     if (!sound) {
       console.log(`Sound ${soundName} was not found.`);
       return;
     }
-    sound.stop();
+    sound.pause();
   }
 }
