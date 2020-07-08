@@ -29,17 +29,21 @@ function generateMines(amount) {
 function updatePlayerSpeed(player) {
   let vx = 0;
   let vy = 0;
+  let factor = 1;
+  if (gameEngine.isKeyHeld(" ")) {
+    factor = 5;
+  }
   if (gameEngine.isKeyHeld("ArrowRight")) {
-    vx += 5;
+    vx += factor;
   }
   if (gameEngine.isKeyHeld("ArrowLeft")) {
-    vx += -5;
+    vx += -factor;
   }
   if (gameEngine.isKeyHeld("ArrowUp")) {
-    vy += 5;
+    vy += factor;
   }
   if (gameEngine.isKeyHeld("ArrowDown")) {
-    vy += -5;
+    vy += -factor;
   }
   player.setSpeed(vx, vy);
 }
