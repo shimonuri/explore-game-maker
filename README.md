@@ -16,7 +16,7 @@ It is meant to be used as a infrastructure for building games for educational/fu
 **Fill**
 
 ```
-// positions is a an array of [x,y] arrays
+// positions is a an array of [x,y] pairs
 fillPixels(positions, red, green, blue, alpha)
 // x, y in the center of the rectangle
 fillRectangle(x, y, width, height, color)
