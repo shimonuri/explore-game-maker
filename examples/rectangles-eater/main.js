@@ -1,8 +1,8 @@
 "use strict";
 
 const gameEngine = new GameEngine();
-let recs = [new Rectangle(400, 300, 10, 10, "yellow", gameEngine)];
-let mainRec = new Rectangle(150, 200, 10, 10, "green", gameEngine);
+let recs = [new Rectangle(400, 300, 10, 10, gameEngine)];
+let mainRec = new Rectangle(150, 200, 10, 10, gameEngine);
 function mainLoop() {
   let vx = 0;
   let vy = 0;
@@ -28,9 +28,12 @@ function mainLoop() {
       newRecs.push(rec);
     } else {
       gameEngine.playSound("plus", "../../assets/sounds");
-      mainRec.color = ["green", "red", "pink", "orange"][
-        Math.round(Math.random() * 3)
-      ];
+      mainRec.color = [
+        [0, 200, 10, 200],
+        [200, 0, 0, 200],
+        [100, 100, 100, 200],
+        [200, 200, 10, 200],
+      ][Math.round(Math.random() * 3)];
       mainRec.increaseSize(5, 5);
 
       for (const i in [1, 2]) {
@@ -39,7 +42,6 @@ function mainLoop() {
           Math.round(Math.random() * gameEngine.getScreenHeight()),
           20,
           20,
-          "yellow",
           gameEngine
         );
         newRec.draw();

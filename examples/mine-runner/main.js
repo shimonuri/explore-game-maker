@@ -27,7 +27,7 @@ function mainLoop() {
       rec.draw();
       newRecs.push(rec);
     } else {
-      gameEngine.playSound("plus", "../../assets/sounds");
+      gameEngine.playSound("donk", "../../assets/sounds");
       mainRec.color = ["green", "red", "pink", "orange"][
         Math.round(Math.random() * 3)
       ];
