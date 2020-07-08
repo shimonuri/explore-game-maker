@@ -4,22 +4,8 @@ const gameEngine = new GameEngine();
 let recs = [new Rectangle(400, 300, 10, 10, gameEngine)];
 let mainRec = new Rectangle(150, 200, 10, 10, gameEngine);
 function mainLoop() {
-  let vx = 0;
-  let vy = 0;
-  if (gameEngine.isKeyHeld("ArrowRight")) {
-    vx += 5;
-  }
-  if (gameEngine.isKeyHeld("ArrowLeft")) {
-    vx += -5;
-  }
-  if (gameEngine.isKeyHeld("ArrowUp")) {
-    vy += 5;
-  }
-  if (gameEngine.isKeyHeld("ArrowDown")) {
-    vy += -5;
-  }
+  updatePlayerSpeed(mainRec);
   gameEngine.clear();
-  mainRec.setSpeed(vx, vy);
   mainRec.draw();
   var newRecs = [];
   for (const rec of recs) {
@@ -52,12 +38,24 @@ function mainLoop() {
   recs = newRecs;
 }
 
-let ballX = 400;
-let ballY = 400;
-function add_falling_balls() {
-  fillColoredCircle(ballX, ballY, 20, 40, "green");
-  ballY -= 2;
+function updatePlayerSpeed(player) {
+  let vx = 0;
+  let vy = 0;
+  if (gameEngine.isKeyHeld("ArrowRight")) {
+    vx += 5;
+  }
+  if (gameEngine.isKeyHeld("ArrowLeft")) {
+    vx += -5;
+  }
+  if (gameEngine.isKeyHeld("ArrowUp")) {
+    vy += 5;
+  }
+  if (gameEngine.isKeyHeld("ArrowDown")) {
+    vy += -5;
+  }
+  player.setSpeed(vx, vy);
 }
+
 // fillRectangle(0, 0, 2000, 1000, "red");
 fillRectangleFromPixels(200, 200, 55, 55, 255, 0, 0, 200, gameEngine);
 
