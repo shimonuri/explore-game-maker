@@ -231,6 +231,16 @@ class GameEngine {
     }
     sound.pause();
   }
+  isSoundPlayed(soundName) {
+    const soundElementId = `__${soundName}__`;
+    let sound = document.getElementById(soundElementId);
+
+    if (!sound) {
+      console.log(`Sound ${soundName} was not found.`);
+      return;
+    }
+    return sound.currentTime > 0;
+  }
   getScreenPixels() {
     var ctx = this.canv.getContext("2d");
     return new ScreenPixels(

@@ -74,6 +74,15 @@ class Rectangle {
     this.y += this.vy + this.ay ** 2 / 2;
     this.vx += this.ax;
     this.vy += this.ay;
+    if (this.x > this.gameEngine.getScreenWidth())
+      this.x -= this.gameEngine.getScreenWidth();
+    if (this.x < 0) this.x += this.gameEngine.getScreenWidth();
+
+    if (this.y > this.gameEngine.getScreenHeight())
+      this.y -= this.gameEngine.getScreenHeight();
+
+    if (this.y < 0) this.y += this.gameEngine.getScreenHeight();
+
     fillRectangleFromPixels(
       this.x,
       this.y,

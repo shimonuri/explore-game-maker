@@ -32,7 +32,21 @@ function updatePlayerSpeed(player) {
   let ay = 0;
   let factor = 0.1;
   if (gameEngine.isKeyHeld(" ")) {
-    factor = 0.5;
+    if (!gameEngine.isSoundPlayed("donk")) {
+      gameEngine.playSound("donk", "../../assets/sounds");
+    }
+    if (player.vx > 0) {
+      ax = -0.5;
+    } else {
+      ax = +0.5;
+    }
+    if (player.vy > 0) {
+      ay = -0.5;
+    } else {
+      ay = +0.5;
+    }
+    player.setAcceleration(ax, ay);
+    return;
   }
   if (gameEngine.isKeyHeld("ArrowRight")) {
     ax += factor;
