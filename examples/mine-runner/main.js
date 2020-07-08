@@ -33,10 +33,10 @@ function mainLoop() {
       ];
       mainRec.increaseSize(5, 5);
 
-      for (const i in [1, 2]) {
+      for (const i in [1]) {
         const newRec = new Rectangle(
-          Math.round(Math.random() * gameEngine.getScreenWidth()),
-          Math.round(Math.random() * gameEngine.getScreenHeight()),
+          Math.round(Math.random() * 500),
+          Math.round(Math.random() * 500),
           20,
           20,
           "yellow",
