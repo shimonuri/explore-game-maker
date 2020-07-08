@@ -27,11 +27,11 @@ class Rectangle {
     const right = this.x + this.width / 2;
     const top = this.y + this.height / 2;
     const bottom = this.y - this.height / 2;
-    for (const i = 0; i < this.height; i += 1) {
+    for (let i = 0; i < this.height; i += 1) {
       positions.push([left, bottom + i]);
       positions.push([right, bottom + i]);
     }
-    for (const i = 0; i < this.height; i += 1) {
+    for (let i = 0; i < this.height; i += 1) {
       positions.push([left + i, bottom]);
       positions.push([left + i, top]);
     }

@@ -2,18 +2,28 @@
 
 const gameEngine = new GameEngine();
 let mainRec = new Rectangle(150, 200, 10, 10, gameEngine);
+let mines = generateMines(30);
 
 function mainLoop() {
   updatePlayerSpeed(mainRec);
   gameEngine.clear();
   mainRec.draw();
-  generateMines();
+  for (const mine of mines) {
+    if (mainRec.isCollides(mine)) {
+      gameEngine.playSound("coin", "../../assets/sounds");
+    }
+    mine.draw();
+  }
 }
 
 function generateMines(amount) {
-  const x = Math.random() * gameEngine.getScreenWidth();
-  const y = Math.random() * gameEngine.getScreenHeight();
-  fillCircleFromPixels(x, y, 50, 1000, 200, 0, 0, 255, gameEngine);
+  const mines = [];
+  for (let i = 0; i < amount; i += 1) {
+    const x = Math.random() * gameEngine.getScreenWidth();
+    const y = Math.random() * gameEngine.getScreenHeight();
+    mines.push(new Ball(x, y, 50, gameEngine, [200, 0, 0, 255]));
+  }
+  return mines;
 }
 
 function updatePlayerSpeed(player) {

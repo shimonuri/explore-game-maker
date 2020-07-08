@@ -169,7 +169,7 @@ class GameEngine {
   }
 
   getScreenWidth() {
-    return this.canvasHeight;
+    return this.canvasWidth;
   }
 
   getMouseX() {
