@@ -9,6 +9,7 @@ class GameEngine {
     this.keyState = {};
     this.afPeriod = null;
     this.afReq = null;
+    this.clickCallback = null;
     const self = this;
     this.canv.addEventListener("mousemove", function (e) {
       var cr = self.canv.getBoundingClientRect();
@@ -16,6 +17,10 @@ class GameEngine {
       self.lastMouseY = self.canvasHeight - (e.clientY - cr.y);
     });
 
+    this.canv.addEventListener("click", function (e) {
+      if (!self.clickCallback) return;
+      self.clickCallback(self.lastMouseX, self.lastMouseY);
+    });
     window.addEventListener("keydown", function (e) {
       // TODO figure out how to bind shifted keys together;
       //  atm key down -> shift down -> key up -> shift up results in "stuck" key
@@ -172,6 +177,13 @@ class GameEngine {
     return this.canvasWidth;
   }
 
+  callOnClick(callback) {
+    if (typeof callback != "function") {
+      console.log("callOnClick callback must be a function");
+      return;
+    }
+    this.clickCallback = callback;
+  }
   getMouseX() {
     if (this.afReq == null) {
       console.log(

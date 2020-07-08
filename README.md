@@ -46,6 +46,8 @@ getPeriod();
 **User Input**
 
 ```
+// signature: callback(x, y)
+callOnClick(callback)
 getMouseX()
 getMouseY()
 isKeyHeld(keyName)
