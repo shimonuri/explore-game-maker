@@ -4,6 +4,8 @@ class Rectangle {
     this.y = y;
     this.vx = 0;
     this.vy = 0;
+    this.ax = 0;
+    this.ay = 0;
     this.height = height;
     this.width = width;
     this.color = color;
@@ -12,6 +14,10 @@ class Rectangle {
   setSpeed(vx, vy) {
     this.vx = vx;
     this.vy = vy;
+  }
+  setAcceleration(ax, ay) {
+    this.ax = ax;
+    this.ay = ay;
   }
   isCollides(obj) {
     if (obj instanceof Rectangle) {
@@ -64,8 +70,10 @@ class Rectangle {
     this.height += height;
   }
   draw() {
-    this.x += this.vx;
-    this.y += this.vy;
+    this.x += this.vx + this.ax ** 2 / 2;
+    this.y += this.vy + this.ay ** 2 / 2;
+    this.vx += this.ax;
+    this.vy += this.ay;
     fillRectangleFromPixels(
       this.x,
       this.y,
