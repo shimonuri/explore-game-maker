@@ -55,4 +55,4 @@ isKeyHeld(keyName)
 
 ### See Also
 
-The exercise is based on: www.spellenmaken.com
+The game engine was based on: www.spellenmaken.com, made by @adeshar00 .
