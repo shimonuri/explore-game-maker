@@ -17,9 +17,10 @@ It is meant to be used as a infrastructure for building games for educational/fu
 
 ```
 // positions is a an array of [x,y] pairs
-fillPixels(positions, red, green, blue, alpha)
 // x, y in the center of the rectangle
-fillRectangle(x, y, width, height, color)
+fillPixels(positions, red, green, blue, alpha)
+  // fill pixels with coordinates 0,0 and 0,1 in red color
+  > gameEngine.fillPixels([[0,0], [0, 1]], 255, 0, 0 , 255)
 clear()
 getScreenWidth()
 getScreenHeight()
@@ -39,27 +40,40 @@ writeParagraph(htmlParagraph)
 ```
 // soundName is the name of the wav file inside assets/sounds without the .wav
 playSound(soundName)
+  > gameEngine.playSound("badBoing");
 pauseSound(soundName)
+  > gameEngine.pauseSound("badDoing"); // will pause badDoing 
 isSoundPlaying(soundName)
 ```
 
 **Loop**
 
 ```
+// loopFunction signature: loopFunction( )
 // the data will be passed to the loopFunction
 startMainLoop(loopFunction, data);
+  > function loopFunction() {
+    gameEngine.clear();
+  }
+  > gameEngine.startMainLoop(loopFunction)
 stopMainLoop();
-getPeriod();
 ```
 
 **User Input**
 
 ```
-// signature: callback(x, y)
+// callback signature: callback(x, y)
 callOnClick(callback)
+  > function callback(x, y) {
+    console.log(`y coordinate ${y}, x coordinate ${y}`);
+  }
+  > gameEngine.callOnClick(callback);
 getMouseX()
 getMouseY()
+// see https://keycode.info/ to get keys names.
 isKeyHeld(keyName)
+  > isKeyHeld(" ") // returns true if space is clicked
+  > isKeyHeld("ArrowRight") // returns true if arrow right is clicked
 ```
 
 ### See Also
