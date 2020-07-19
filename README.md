@@ -23,6 +23,15 @@ fillRectangle(x, y, width, height, color)
 clear()
 getScreenWidth()
 getScreenHeight()
+// returns ScreenPixels object with getPixel(x, y) API.
+getScreenPixels()
+```
+
+**Text**
+
+```
+// htmlParahraph to write. use <b></b> or <br/> for bold/new line
+writeParagraph(htmlParagraph)
 ```
 
 **Sound**

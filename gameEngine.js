@@ -261,6 +261,11 @@ class GameEngine {
       this.canvasHeight
     );
   }
+  writeParagraph(htmlParagraph) {
+    const paragraphObjectName = "paragraph"
+    const paragraph = document.getElementById(paragraphObjectName);
+    paragraph.innerHTML = htmlParagraph;
+  }
 }
 
 class ScreenPixels {

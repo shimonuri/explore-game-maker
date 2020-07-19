@@ -4,7 +4,7 @@ const gameEngine = new GameEngine();
 let mainRec = new Rectangle(650, 300, 40, 40, gameEngine);
 let oponentRec = new Rectangle(150, 300, 40, 40, gameEngine, [0, 255, 0, 255]);
 let mines = [];
-
+let hits = 0
 function mainLoop() {
   updatePlayerSpeed(mainRec);
   updateOponentSpeed(oponentRec);
@@ -28,7 +28,9 @@ function mainLoop() {
     const originalMainVy = mainRec.vy;
     mainRec.setSpeed(oponentRec.vx, oponentRec.vy);
     oponentRec.setSpeed(originalMainVx, originalMainVy);
+    hits += 1;
   }
+  gameEngine.writeParagraph(`<b>Hits:</b> ${hits}`)
 }
 
 function generateMines(amount) {
