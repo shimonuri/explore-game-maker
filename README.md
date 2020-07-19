@@ -13,7 +13,7 @@ It is meant to be used as a infrastructure for building games for educational/fu
 
 ## API
 
-**Fill**
+**Color**
 
 ```
 // positions is a an array of [x,y] pairs
@@ -33,6 +33,7 @@ getScreenPixels()
 ```
 // htmlParahraph to write. use <b></b> or <br/> for bold/new line
 writeParagraph(htmlParagraph)
+  > gameEngine.writeParagraph("<br>hello</br> world")
 ```
 
 **Sound**
@@ -68,6 +69,7 @@ callOnClick(callback)
     console.log(`y coordinate ${y}, x coordinate ${y}`);
   }
   > gameEngine.callOnClick(callback);
+// returns current coordinates of the mouse
 getMouseX()
 getMouseY()
 // see https://keycode.info/ to get keys names.
