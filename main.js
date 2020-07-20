@@ -1,6 +1,12 @@
 "use strict";
+
+// initializing the game engine
 const gameEngine = new GameEngine();
 
-function mainLoop() {}
+/**
+ * Run a single loop of the game.
+ * @param {object}   data    the game state.
+ */
+function mainLoop(data) {}
 
-gameEngine.startMainLoop(mainLoop);
+gameEngine.startMainLoop(mainLoop, {});
