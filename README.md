@@ -49,33 +49,46 @@ isSoundPlaying(soundName)
 
 **Loop**
 
-```
 // loopFunction signature: loopFunction( )
 // the data will be passed to the loopFunction
 startMainLoop(loopFunction, data);
-  > function loopFunction() {
-    gameEngine.clear();
-  }
-  > gameEngine.startMainLoop(loopFunction)
-stopMainLoop();
 ```
+> function loopFunction() {
+  gameEngine.clear();
+}
+> gameEngine.startMainLoop(loopFunction)
+```
+stopMainLoop();
 
 **User Input**
 
 ```
-// callback signature: callback(x, y)
-callOnClick(callback)
-  > function callback(x, y) {
+/*
+  the function gets a callback and invokes it with coordinates
+  when mouse is clicked. for example:
+
+  function callback(x, y) {
     console.log(`y coordinate ${y}, x coordinate ${y}`);
   }
-  > gameEngine.callOnClick(callback);
-// returns current coordinates of the mouse
+  gameEngine.callOnClick(callback);
+*/
+callOnClick(callback)
+  
+/*
+  reutrns current X and Y coordinates
+*/
 getMouseX()
 getMouseY()
-// see https://keycode.info/ to get keys names.
+
+/*
+  returns whether a key is clilcked (true or false)
+  see https://keycode.info/ to get keys names (event.key). for example:
+  
+  isKeyHeld(" ") // returns true if space is clicked
+  isKeyHeld("ArrowRight") // returns true if arrow right is clicked
+*/
 isKeyHeld(keyName)
-  > isKeyHeld(" ") // returns true if space is clicked
-  > isKeyHeld("ArrowRight") // returns true if arrow right is clicked
+
 ```
 
 ### See Also
