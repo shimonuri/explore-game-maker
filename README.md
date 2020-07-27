@@ -16,49 +16,84 @@ It is meant to be used as a infrastructure for building games for educational/fu
 **Color**
 
 ```
-// positions is a an array of [x,y] pairs
-// x, y in the center of the rectangle
-fillPixels(positions, red, green, blue, alpha)
-  // fill pixels with coordinates 0,0 and 0,1 in red color
-  > gameEngine.fillPixels([[0,0], [0, 1]], 255, 0, 0 , 255)
-clear()
-getScreenWidth()
-getScreenHeight()
-// returns ScreenPixels object with getPixel(x, y) API.
-getScreenPixels()
+/*
+  fill an array of pixels with RGBA colors.
+  positions is an array of coordinates(x, y). for example:
+
+  gameEngine.fillPixels([[0,0], [0, 1]], 255, 0, 0 , 255);
+*/
+fillPixels(positions, red, green, blue, alpha);
+
+/*
+  clear the screen from pixels
+*/
+clear();
+
+/*
+  get screen diminisons 
+*/
+getScreenWidth();
+getScreenHeight();
+
+/*
+  return ScreenPixels object. use ScreenPixels.getPixel(x, y)
+  to get RGBA status of the screen
+*/
+getScreenPixels();
 ```
 
 **Text**
 
 ```
-// htmlParahraph to write. use <b></b> or <br/> for bold/new line
-writeParagraph(htmlParagraph)
-  > gameEngine.writeParagraph("<br>hello</br> world")
+/*
+  write an htmlParahraph to write. 
+  use <b></b> or <br/> for bold/new line. for example:
+  gameEngine.writeParagraph("<br>hello</br> world")
+*/
+writeParagraph(htmlParagraph);
 ```
 
 **Sound**
 
 ```
-// soundName is the name of the wav file inside assets/sounds without the .wav
-playSound(soundName)
-  > gameEngine.playSound("badBoing");
-pauseSound(soundName)
-  > gameEngine.pauseSound("badDoing"); // will pause badDoing 
-isSoundPlaying(soundName)
+/*
+  plays a sound from assets/sounds. 
+  note: soundName is the name of the wav file inside assets/sounds without the .wav. for example:
+
+  gameEngine.playSound("badBoing");
+*/
+playSound(soundName);
+
+/*
+  pause a running sound. for example:
+
+  gameEngine.pauseSound("badDoing");
+*/
+pauseSound(soundName);
+
+/*
+  whether a sound is currently being played.
+*/
+isSoundPlaying(soundName);
 ```
 
 **Loop**
 
-// loopFunction signature: loopFunction( )
-// the data will be passed to the loopFunction
+```
+/*
+  runs the loopFunction to update screen.
+  the data will be passed to the loopFunction. for example:
+
+  function loopFunction() {
+    gameEngine.clear();
+  }
+  gameEngine.startMainLoop(loopFunction);
+*/
 startMainLoop(loopFunction, data);
-```
-> function loopFunction() {
-  gameEngine.clear();
-}
-> gameEngine.startMainLoop(loopFunction)
-```
+
 stopMainLoop();
+
+```
 
 **User Input**
 
@@ -72,13 +107,13 @@ stopMainLoop();
   }
   gameEngine.callOnClick(callback);
 */
-callOnClick(callback)
+callOnClick(callback);
   
 /*
   reutrns current X and Y coordinates
 */
-getMouseX()
-getMouseY()
+getMouseX();
+getMouseY();
 
 /*
   returns whether a key is clilcked (true or false)
@@ -87,7 +122,7 @@ getMouseY()
   isKeyHeld(" ") // returns true if space is clicked
   isKeyHeld("ArrowRight") // returns true if arrow right is clicked
 */
-isKeyHeld(keyName)
+isKeyHeld(keyName);
 
 ```
 
